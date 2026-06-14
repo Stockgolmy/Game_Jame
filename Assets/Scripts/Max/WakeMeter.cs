@@ -72,6 +72,6 @@ public class WakeMeter : MonoBehaviour
         if (timerEnded) return;
 
         timerEnded = true;
-        
+        SceneManager.LoadScene("MainMenu");
     }
 }
