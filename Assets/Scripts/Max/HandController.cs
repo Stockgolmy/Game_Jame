@@ -89,4 +89,30 @@ public class HandController : MonoBehaviour
 
         return movementBounds.transform.TransformPoint(localPoint + movementBounds.center);
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        AlarmClock alarm = other.GetComponentInParent<AlarmClock>();
+        if (alarm != null)
+        {
+            alarm.TurnOff();
+            return;
+        }
+
+        Cactus cactus = other.GetComponentInParent<Cactus>();
+        if (cactus != null)
+        {
+            cactus.TryDealDamage();
+            return;
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        Cactus cactus = other.GetComponentInParent<Cactus>();
+        if (cactus != null)
+        {
+            cactus.TryDealDamage();
+        }
+    }
 }
