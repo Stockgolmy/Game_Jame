@@ -1,10 +1,11 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InputHandler : MonoBehaviour
 {
     public static InputHandler Instance;
 
-    public Vector3 mouseScreenPosition;
+    public Vector2 mouseScreenPosition;
     public float scrollDelta;
     public bool leftMousePressed;
 
@@ -15,8 +16,10 @@ public class InputHandler : MonoBehaviour
 
     private void Update()
     {
-        mouseScreenPosition = Input.mousePosition;
-        scrollDelta = Input.mouseScrollDelta.y;
-        leftMousePressed = Input.GetMouseButtonDown(0);
+        if (Mouse.current == null) return;
+
+        mouseScreenPosition = Mouse.current.position.ReadValue();
+        scrollDelta = Mouse.current.scroll.ReadValue().y;
+        leftMousePressed = Mouse.current.leftButton.wasPressedThisFrame;
     }
 }
