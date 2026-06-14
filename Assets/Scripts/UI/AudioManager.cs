@@ -6,7 +6,8 @@ public class AudioManager : MonoBehaviour
 
     [SerializeField] private AudioSource _musicSource;
     
-    public float Volume => _musicSource.volume;
+    // Теперь мы читаем громкость с "ушей" игры (AudioListener), а не с плеера
+    public float Volume => AudioListener.volume; 
 
     private void Awake()
     {
@@ -18,7 +19,7 @@ public class AudioManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        // ВОТ ОНА, ЭТА СТРОЧКА! Запрещаем паузе останавливать эту музыку
+        // Оставляем это, чтобы музыка не останавливалась при паузе
         _musicSource.ignoreListenerPause = true; 
     }
 
@@ -30,6 +31,7 @@ public class AudioManager : MonoBehaviour
 
     public void SetVolume(float volume)
     {
-        _musicSource.volume = volume;
+        // Меняем МАСТЕР-громкость всей игры! Теперь она влияет на всё.
+        AudioListener.volume = volume;
     }
 }
