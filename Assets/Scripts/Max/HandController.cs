@@ -7,8 +7,6 @@ public class HandController : MonoBehaviour
 
     [Header("Height")]
     public float handHeight = 1f;
-    public float minHeight = 0.3f;
-    public float maxHeight = 3f;
     public float scrollHeightSpeed = 0.5f;
 
     [Header("Debug")]
@@ -35,7 +33,6 @@ public class HandController : MonoBehaviour
     public void UpdateHeight()
     {
         handHeight += InputHandler.Instance.scrollDelta * scrollHeightSpeed;
-        handHeight = Mathf.Clamp(handHeight, minHeight, maxHeight);
     }
 
     public void UpdateTargetPosition()
@@ -60,16 +57,14 @@ public class HandController : MonoBehaviour
         if (movementBounds == null)
             return worldPoint;
 
-        Vector3 localPoint = movementBounds.transform.InverseTransformPoint(worldPoint);
-
-        Vector3 localCenter = movementBounds.center;
+        Vector3 localPoint = movementBounds.transform.InverseTransformPoint(worldPoint) - movementBounds.center;
         Vector3 halfSize = movementBounds.size * 0.5f;
 
-        localPoint.x = Mathf.Clamp(localPoint.x, localCenter.x - halfSize.x, localCenter.x + halfSize.x);
-        localPoint.y = Mathf.Clamp(localPoint.y, localCenter.y - halfSize.y, localCenter.y + halfSize.y);
-        localPoint.z = Mathf.Clamp(localPoint.z, localCenter.z - halfSize.z, localCenter.z + halfSize.z);
+        localPoint.x = Mathf.Clamp(localPoint.x, -halfSize.x, halfSize.x);
+        localPoint.y = Mathf.Clamp(localPoint.y, -halfSize.y, halfSize.y);
+        localPoint.z = Mathf.Clamp(localPoint.z, -halfSize.z, halfSize.z);
 
-        return movementBounds.transform.TransformPoint(localPoint);
+        return movementBounds.transform.TransformPoint(localPoint + movementBounds.center);
     }
 
     private void OnTriggerEnter(Collider other)
