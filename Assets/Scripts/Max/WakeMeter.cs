@@ -74,6 +74,6 @@ public class WakeMeter : MonoBehaviour
         timerEnded = true;
         
     //    if (GameManager.Instance != null)
-            GameManager.Instance.GameOver();
+    //        GameManager.Instance.GameOver();
     }
 }
