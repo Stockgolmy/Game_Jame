@@ -17,7 +17,7 @@ public class SimpleProgressBar : MonoBehaviour
     {
         if (wakeMeter == null) return;
 
-        SetProgress(wakeMeter.currentWakefulness, wakeMeter.maxWakefulness);
+        SetProgress(wakeMeter.currentValue, wakeMeter.maxValue);
     }
 
     public void SetProgress(float currentValue, float maxValue)

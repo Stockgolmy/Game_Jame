@@ -2,26 +2,32 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    // Синглтон для удобного доступа из любого места
     public static AudioManager Instance { get; private set; }
 
     [SerializeField] private AudioSource _musicSource;
     
-    public float Volume => _musicSource.volume; // Свойство для чтения текущей громкости
+    public float Volume => _musicSource.volume;
 
     private void Awake()
     {
-        // Реализация синглтона
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject); // Чтобы музыка не прерывалась при загрузке уровня
+        DontDestroyOnLoad(gameObject);
+
+        // ВОТ ОНА, ЭТА СТРОЧКА! Запрещаем паузе останавливать эту музыку
+        _musicSource.ignoreListenerPause = true; 
     }
 
-    // Метод для изменения громкости (вызывается из UI)
+    public void PlayMusic()
+    {
+        if (_musicSource.isPlaying) return;
+        _musicSource.Play();
+    }
+
     public void SetVolume(float volume)
     {
         _musicSource.volume = volume;
