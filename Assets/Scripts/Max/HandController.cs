@@ -9,8 +9,14 @@ public class HandController : MonoBehaviour
     public float handHeight = 1f;
     public float scrollHeightSpeed = 0.5f;
 
+    [Header("Movement")]
+    public float smoothTime = 0.08f;
+    public float maxSpeed = 100f;
+
     [Header("Debug")]
     public Vector3 targetPosition;
+
+    private Vector3 currentVelocity;
 
     private void Start()
     {
@@ -27,7 +33,7 @@ public class HandController : MonoBehaviour
 
         UpdateHeight();
         UpdateTargetPosition();
-        MoveHandInstant();
+        MoveHandSmooth();
     }
 
     public void UpdateHeight()
@@ -47,9 +53,15 @@ public class HandController : MonoBehaviour
         }
     }
 
-    public void MoveHandInstant()
+    public void MoveHandSmooth()
     {
-        transform.position = targetPosition;
+        transform.position = Vector3.SmoothDamp(
+            transform.position,
+            targetPosition,
+            ref currentVelocity,
+            smoothTime,
+            maxSpeed
+        );
     }
 
     public Vector3 ClampPointToBounds(Vector3 worldPoint)
