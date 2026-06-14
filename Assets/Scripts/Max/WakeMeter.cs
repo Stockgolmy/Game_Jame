@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class WakeMeter : MonoBehaviour
 {
     public static WakeMeter Instance;
@@ -73,7 +73,5 @@ public class WakeMeter : MonoBehaviour
 
         timerEnded = true;
         
-    //    if (GameManager.Instance != null)
-    //        GameManager.Instance.GameOver();
     }
 }
