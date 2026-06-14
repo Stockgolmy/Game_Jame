@@ -1,20 +1,25 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class SimpleProgressBar : MonoBehaviour
 {
-    public Image fillImage;
+    public float maxWidth = 500f;
+
+    private RectTransform rectTransform;
+
+    private void Awake()
+    {
+        rectTransform = GetComponent<RectTransform>();
+        maxWidth = rectTransform.sizeDelta.x;
+    }
 
     public void SetProgress(float currentTime, float maxTime)
     {
-        if (fillImage == null) return;
+        if (rectTransform == null) return;
 
-        if (maxTime <= 0f)
-        {
-            fillImage.fillAmount = 0f;
-            return;
-        }
+        float progress = maxTime <= 0f ? 0f : Mathf.Clamp01(currentTime / maxTime);
 
-        fillImage.fillAmount = Mathf.Clamp01(currentTime / maxTime);
+        Vector2 size = rectTransform.sizeDelta;
+        size.x = maxWidth * progress;
+        rectTransform.sizeDelta = size;
     }
 }
