@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 public class WakeMeter : MonoBehaviour
 {
     public static WakeMeter Instance;
@@ -28,6 +29,27 @@ public class WakeMeter : MonoBehaviour
 
         currentValue += speed * multiplier * Time.deltaTime;
         currentValue = Mathf.Clamp(currentValue, minValue, maxValue);
+
+        Debug.Log($"multiplier={multiplier}, currentValue={currentValue}");
+
+        if (multiplier <= 1.01f && currentValue > 3f)
+        {
+            Debug.Log("УСЛОВИЕ NEXT LEVEL СРАБОТАЛО");
+
+            ResetMeter();
+
+            if (LevelManager.Instance != null)
+            {
+                Debug.Log("LevelManager OK, вызываю NextLevel");
+                LevelManager.Instance.NextLevel();
+            }
+            else
+            {
+                Debug.LogError("LevelManager.Instance == null");
+            }
+
+            return;
+        }
 
         if (currentValue >= maxValue)
         {
@@ -63,7 +85,6 @@ public class WakeMeter : MonoBehaviour
     public void ResetMeter()
     {
         currentValue = minValue;
-        //multiplier = 1f;
         timerEnded = false;
     }
 
