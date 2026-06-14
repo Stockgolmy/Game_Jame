@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class SimpleProgressBar : MonoBehaviour
 {
+    public WakeMeter wakeMeter;
     public float maxWidth = 500f;
 
     private RectTransform rectTransform;
@@ -12,11 +13,18 @@ public class SimpleProgressBar : MonoBehaviour
         maxWidth = rectTransform.sizeDelta.x;
     }
 
-    public void SetProgress(float currentTime, float maxTime)
+    private void Update()
+    {
+        if (wakeMeter == null) return;
+
+        SetProgress(wakeMeter.currentWakefulness, wakeMeter.maxWakefulness);
+    }
+
+    public void SetProgress(float currentValue, float maxValue)
     {
         if (rectTransform == null) return;
 
-        float progress = maxTime <= 0f ? 0f : Mathf.Clamp01(currentTime / maxTime);
+        float progress = maxValue <= 0f ? 0f : Mathf.Clamp01(currentValue / maxValue);
 
         Vector2 size = rectTransform.sizeDelta;
         size.x = maxWidth * progress;
