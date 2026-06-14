@@ -42,7 +42,7 @@ public class WakeMeter : MonoBehaviour
 
     public void DecreaseMultiplier(float amount = 1f)
     {
-        multiplier = Mathf.Max(0f, multiplier - amount);
+        multiplier = Mathf.Max(1f, multiplier - amount);
     }
 
     public void AddValue(float amount)
@@ -63,7 +63,7 @@ public class WakeMeter : MonoBehaviour
     public void ResetMeter()
     {
         currentValue = minValue;
-        multiplier = 1f;
+        //multiplier = 1f;
         timerEnded = false;
     }
 
