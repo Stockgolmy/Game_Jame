@@ -1,10 +1,8 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
 public class HandController : MonoBehaviour
 {
     public Camera mainCamera;
-    public Rigidbody rb;
     public BoxCollider movementBounds;
 
     [Header("Height")]
@@ -13,32 +11,16 @@ public class HandController : MonoBehaviour
     public float maxHeight = 3f;
     public float scrollHeightSpeed = 0.5f;
 
-    [Header("Movement")]
-    public float moveSpeed = 20f;
-    public float maxSpeed = 25f;
-    public float stopDistance = 0.1f;
-    public float slowRadius = 1.5f;
-    public float velocityDamping = 8f;
-
     [Header("Debug")]
     public Vector3 targetPosition;
-
-    private void Awake()
-    {
-        rb = GetComponent<Rigidbody>();
-    }
 
     private void Start()
     {
         if (mainCamera == null)
             mainCamera = Camera.main;
 
-        targetPosition = transform.position;
         handHeight = transform.position.y;
-
-        rb.useGravity = false;
-        rb.interpolation = RigidbodyInterpolation.Interpolate;
-        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        targetPosition = transform.position;
     }
 
     private void Update()
@@ -47,11 +29,7 @@ public class HandController : MonoBehaviour
 
         UpdateHeight();
         UpdateTargetPosition();
-    }
-
-    private void FixedUpdate()
-    {
-        MoveHandPhysics();
+        MoveHandInstant();
     }
 
     public void UpdateHeight()
@@ -68,10 +46,13 @@ public class HandController : MonoBehaviour
         if (handPlane.Raycast(ray, out float distance))
         {
             Vector3 hitPoint = ray.GetPoint(distance);
-            hitPoint.y = handHeight;
-
             targetPosition = ClampPointToBounds(hitPoint);
         }
+    }
+
+    public void MoveHandInstant()
+    {
+        transform.position = targetPosition;
     }
 
     public Vector3 ClampPointToBounds(Vector3 worldPoint)
@@ -89,31 +70,6 @@ public class HandController : MonoBehaviour
         localPoint.z = Mathf.Clamp(localPoint.z, localCenter.z - halfSize.z, localCenter.z + halfSize.z);
 
         return movementBounds.transform.TransformPoint(localPoint);
-    }
-
-    public void MoveHandPhysics()
-    {
-        Vector3 toTarget = targetPosition - rb.position;
-        float distance = toTarget.magnitude;
-
-        if (distance <= stopDistance)
-        {
-            rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, Vector3.zero, velocityDamping * Time.fixedDeltaTime);
-            return;
-        }
-
-        float speedFactor = 1f;
-
-        if (distance < slowRadius)
-            speedFactor = distance / slowRadius;
-
-        Vector3 desiredVelocity = toTarget.normalized * moveSpeed * speedFactor;
-        Vector3 newVelocity = Vector3.Lerp(rb.linearVelocity, desiredVelocity, velocityDamping * Time.fixedDeltaTime);
-
-        if (newVelocity.magnitude > maxSpeed)
-            newVelocity = newVelocity.normalized * maxSpeed;
-
-        rb.linearVelocity = newVelocity;
     }
 
     private void OnTriggerEnter(Collider other)
