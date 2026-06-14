@@ -4,6 +4,7 @@ public class HandController : MonoBehaviour
 {
     public Camera mainCamera;
     public BoxCollider movementBounds;
+    public Rigidbody rb;
 
     [Header("Height")]
     public float handHeight = 1f;
@@ -23,6 +24,9 @@ public class HandController : MonoBehaviour
         if (mainCamera == null)
             mainCamera = Camera.main;
 
+        if (rb == null)
+            rb = GetComponent<Rigidbody>();
+
         handHeight = transform.position.y;
         targetPosition = transform.position;
     }
@@ -33,7 +37,11 @@ public class HandController : MonoBehaviour
 
         UpdateHeight();
         UpdateTargetPosition();
-        MoveHandSmooth();
+    }
+
+    private void FixedUpdate()
+    {
+        MoveHandSmoothPhysics();
     }
 
     public void UpdateHeight()
@@ -53,15 +61,18 @@ public class HandController : MonoBehaviour
         }
     }
 
-    public void MoveHandSmooth()
+    public void MoveHandSmoothPhysics()
     {
-        transform.position = Vector3.SmoothDamp(
-            transform.position,
+        Vector3 newPosition = Vector3.SmoothDamp(
+            rb.position,
             targetPosition,
             ref currentVelocity,
             smoothTime,
-            maxSpeed
+            maxSpeed,
+            Time.fixedDeltaTime
         );
+
+        rb.MovePosition(newPosition);
     }
 
     public Vector3 ClampPointToBounds(Vector3 worldPoint)
@@ -77,31 +88,5 @@ public class HandController : MonoBehaviour
         localPoint.z = Mathf.Clamp(localPoint.z, -halfSize.z, halfSize.z);
 
         return movementBounds.transform.TransformPoint(localPoint + movementBounds.center);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        AlarmClock alarm = other.GetComponentInParent<AlarmClock>();
-        if (alarm != null)
-        {
-            alarm.TurnOff();
-            return;
-        }
-
-        Cactus cactus = other.GetComponentInParent<Cactus>();
-        if (cactus != null)
-        {
-            cactus.TryDealDamage();
-            return;
-        }
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        Cactus cactus = other.GetComponentInParent<Cactus>();
-        if (cactus != null)
-        {
-            cactus.TryDealDamage();
-        }
     }
 }
