@@ -47,6 +47,12 @@ public class HandController : MonoBehaviour
     public void UpdateHeight()
     {
         handHeight += InputHandler.Instance.scrollDelta * scrollHeightSpeed;
+
+        if (movementBounds != null)
+        {
+            Bounds bounds = movementBounds.bounds;
+            handHeight = Mathf.Clamp(handHeight, bounds.min.y, bounds.max.y);
+        }
     }
 
     public void UpdateTargetPosition()

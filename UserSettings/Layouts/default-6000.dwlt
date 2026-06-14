@@ -1179,9 +1179,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: 1722.1167, y: -321.57626, z: 1677.0367}
+    m_Target: {x: 609.2642, y: 287.62738, z: 145.52715}
     speed: 2
-    m_Value: {x: 826.312, y: 126.052, z: 1075.9562}
+    m_Value: {x: 609.2642, y: 287.62738, z: 145.52715}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1228,13 +1228,13 @@ MonoBehaviour:
     m_gridOpacity: 0.5
     m_NearestPlaneToHandleMode: 0
   m_Rotation:
-    m_Target: {x: -0.1472427, y: -0.30468082, z: 0.047731332, w: -0.9398004}
+    m_Target: {x: -0.1924663, y: -0.38181272, z: 0.081620865, w: -0.90029544}
     speed: 2
-    m_Value: {x: 0.23714453, y: 0.5392439, z: -0.16151038, w: 0.79176706}
+    m_Value: {x: 0.1924663, y: 0.38181275, z: -0.08162087, w: 0.9002955}
   m_Size:
-    m_Target: 1268.7982
+    m_Target: 842.9794
     speed: 2
-    m_Value: 1218.4191
+    m_Value: 842.9794
   m_Ortho:
     m_Target: 0
     speed: 2
